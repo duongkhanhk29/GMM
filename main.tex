@@ -1,0 +1,240 @@
+\documentclass[color=usenames,dvipsnames]{beamer}
+
+\mode<presentation> {
+
+\usetheme{Madrid}
+\usecolortheme{lily}
+\useoutertheme{infolines}
+
+}
+
+
+\usepackage{booktabs} 
+\usepackage{tikz}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+% Thin fonts
+\usepackage{cmbright}
+\usepackage[T1]{fontenc}
+
+\definecolor{dark_grey}{gray}{0.5}
+\setbeamercolor{normal text}{fg=dark_grey,bg=white}
+\setbeamertemplate{navigation symbols}{}
+
+\setbeamercolor*{palette primary}{fg=gray!100,bg=gray!10}
+\setbeamercolor*{palette quaternary}{fg=gray!100,bg=gray!10}
+\setbeamercolor*{palette secondary}{fg=gray!100,bg=gray!20}
+\setbeamercolor*{palette tertiary}{fg=gray!100,bg=gray!10}
+\setbeamercolor*{navigation symbols}{fg=white,bg=white}
+\usefonttheme{default}
+
+
+\setbeamertemplate{blocks}[rounded][shadow=false]
+\setbeamercolor{block title}{bg=gray!10}
+\setbeamercolor{block body}{fg=gray,bg=gray!10}
+%\setbeamercolor{frametitle}{fg=}
+
+\setbeamertemplate{frametitle}[default][center]
+
+\setbeamertemplate{itemize items}[default]
+\setbeamertemplate{enumerate items}[default]
+
+\newcommand{\F}{\mathbb{F}}
+
+
+\title[Generalized method of moments]{Generalized method of moments}
+\author{Khanh Duong}
+\institute{Personal repository}
+\date{\today}
+\begin{document}
+
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% Uncomment these lines for an automatically generated outline.
+%\begin{frame}{Outline}
+%  \tableofcontents
+%\end{frame}
+
+
+\begin{frame}{Introduction}
+    The modelling equation can be rewritten as 
+    \begin{equation}
+    Y_{(i,t)} = \theta_0 + \theta_1 Y_{(i,t-1)} + \theta_2 X_{(i,t)} + \mu_i + \epsilon_{(i,t)}
+    \label{eq:1}
+    \end{equation}
+    where \(i = [1, N]\) represents many \textbf{cross-sectional units} and \(t = [1, T]\) represents few \textbf{time periods}, with \textbf{country-specific effects} \(\mu_i\) and the idiosyncratic error term \(\epsilon_{(i,t)}\). The regressors \(X_{(i,t)}\) can have different properties with respect to their correlation with the error term \(\epsilon_{(i,t)}\).
+
+    \vskip 0.5cm
+    
+    \begin{block}{Classification of regressors}
+    The choice of whether to treat the regressors as \textbf{strictly exogenous}, \textbf{predetermined}, or \textbf{exogenous} depends on the nature of the data and the research question being addressed.
+    \end{block}
+
+\end{frame}
+
+\begin{frame}{Strictly exogenous regressors}
+    \begin{itemize}
+    
+        \item If the regressors are strictly exogenous, it means that the variables \(X\) are uncorrelated with \textbf{past}, \textbf{present}, and \textbf{future} values of the error term.
+        
+        \item In other words, \(E[X_{it}\epsilon_{is}] = 0\) for all \(t\) and \(s\).
+        
+        \item This implies that the values of \(X\) do not depend on the values of the error term at any point in time.
+    
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Predetermined regressors}
+    \begin{itemize}
+    
+        \item If the regressors are predetermined, it means that the variables \(X\) are correlated with \textbf{past} values of the error term but \textbf{not present nor future} values.
+        
+        \item In other words, \(E[X_{it} \epsilon_{is}] \neq 0\) for \(s < t\), but \(E[X_{it} \epsilon_{is}] = 0\) for \(s \ge t\).
+    
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Endogenous regressors}
+    \begin{itemize}
+    
+        \item If the regressors are endogenous, it means that the variables \(X\) are correlated with \textbf{past} and \textbf{present} values of the error term but \textbf{not future} values.
+        
+        \item In other words, \(E[X_{it} \epsilon_{is}] \neq 0\) for \(s < t\), but \(E[X_{it} \epsilon_{is}] = 0\) for \(s \ge t\).
+    
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Country-specific effects}
+    To account for the \textbf{country-specific effects} \(\mu_i\), we employ the first difference transformation to Equation \ref{eq:1} into
+    \[
+    \Delta Y_{(i,t)} = \theta_1 \Delta Y_{(i,t-1)} + \theta_2 \Delta X_{(i,t)} + \Delta \epsilon_{(i,t)}
+    \]
+\end{frame}
+
+\begin{frame}{The method of moments (1/2)}
+
+    \begin{itemize}
+    
+        \item Afterwards, we generate \textbf{instruments} for the lagged dependent variable by using the second and third lags of $Y$, either as differences or lagged levels.
+        
+        \item Utilizing the \textbf{Arellano–Bond approach\footnote{Arellano, M. and Bond, S., 1991. Some tests of specification for panel data: Monte Carlo evidence and an application to employment equations. \textit{The review of economic studies}, 58(2), pp.277-297.}}, we construct instrumental variables $Z_i$ by imposing these moment conditions on the first difference model: $E[Y_{i,t-s} \Delta \epsilon_{it}] = 0$ for $s = 2, t$.
+        
+        \item When the individual effect term exhibits high variance across individual observations, the Arellano-Bond estimator may yield \textbf{poor performance} in finite samples.
+    
+        \item This occurs because the lagged dependent variables become \textbf{weak instruments} under such circumstances.
+    
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{The method of moments (2/2)}
+
+    \begin{itemize}
+        \item \textbf{Blundell and Bond\footnote{Blundell, R. and Bond, S., 1998. Initial conditions and moment restrictions in dynamic panel data models. \textit{Journal of econometrics}, 87(1), pp.115-143.}} derived a condition that allows for the utilization of an additional set of moment conditions for the level model: $E[\Delta Y_{i,t-1} \Delta \epsilon_{it}] = 0$ for $t = 2, T$.
+        
+        \item Similarly, depending on the nature of the variables $X$, other instruments for those variables are incorporated as well.
+        
+        \item Overall, we assemble the stacked moment conditions as: $E[Z_i'\Delta \epsilon_i] = 0$, where the instrumental variables $Z_i$ are constructed from values of $X$ and $Y$.
+
+        \item Hence, we refer to this approach as \textbf{the method of moments}.
+        
+    \end{itemize}
+    
+\end{frame}
+
+\begin{frame}{The GMM estimator (1/2) }
+    \begin{itemize}
+        \item The moment conditions form a system of equations with unknown coefficients $\theta$: $E[Z_i'\Delta \epsilon_i] = E[m_i (\theta)] = 0$.
+        
+        \item It is evident that the vector of moment conditions ($m_i$) is larger than the vector of coefficients $\theta$, meaning that $E[m_i (\theta)]$ cannot simultaneously satisfy the condition of being equal to zero.
+
+        \item Therefore, we aim to minimize the squared distance between the sample moment conditions and zero, which can be represented as $\| \hat{m}_i(\theta) \|_W^2 = \hat{m}_i(\theta)^T W \hat{m}_i(\theta) = f(\theta)$, where $W$ is \textbf{the weight matrix of moments} and $\hat{m}^T$ denotes transposition.
+
+        \item By using a generalized metric for moment conditions $f(\theta)$, this method is referred to as the \textbf{generalized method of moments}.
+
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{The GMM estimator (2/2)}
+    \begin{itemize}
+        \item The minimal value of $f(\theta)$ occurs when its derivative with respect to $\theta$ is equal to zero, i.e., $\frac{df}{d\theta} = 0$. Obviously, the GMM estimator depends on the choice of the weight matrix $W$.
+
+        \item A commonly used proposal for the weight matrix is $\hat{W} = \left( \frac{1}{N} Z'HZ \right)^{-1}$, where $Z$ is the instrument matrix. Under the Blundell and Bond approach for the system GMM estimator, $H$ is equal to the identity matrix ($I$).
+
+        \item The estimation generated by this method is called the \textbf{one-step system} GMM estimator, and its weighting matrix is denoted as $\hat{W}_1$.
+
+        \item The \textbf{two-step estimator} utilizes $\hat{W}_2 = \left( \frac{1}{N} Z'\hat{s}_1 \hat{s}_1' Z \right)^{-1}$, where $\hat{s}_1$ represents the residuals obtained from the one-step estimation.
+
+    \end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Robustness (1/4)}
+    \begin{itemize}
+        \item The absence of higher-order serial correlation in $\Delta \epsilon_{it}$ is crucial for the validity of using $Y_{i,t-2}$, $Y_{i,t-3}$, and other variables as instruments in the GMM framework.
+
+        \item Similarly, it is important for the instruments of predetermined and endogenous variables.
+
+        \item To test for this, the \textbf{Arellano-Bond serial-correlation test} should be conducted. The test statistic, following an asymptotic $N(0,1)$ distribution, examines the null hypothesis $H_0: \text{Corr}(\Delta \epsilon_{it}, \Delta \epsilon_{it-j}) = 0$ for $j > 0$.
+
+        \item If the null hypothesis is rejected for $j = 1$ but not rejected for $j > 1$, it suggests that the model passes this specification test.
+
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Robustness (2/4)}
+    \begin{itemize}
+        \item Additionally, in overidentified models (e.g. GMM), where the number of moment conditions $L$ exceeds the number of unknown coefficients $K$, it is important to test the validity of the $L - K$ overidentifying restrictions. .
+
+        \item These tests assume that at least $K$ instruments are valid.
+
+        \item The \textbf{Sargan overidentification test} is commonly used for this purpose.
+
+        \item The test statistic follows an asymptotic $\chi^2$ distribution with $df$ degrees of freedom, where $df$ is equal to $L - K$.
+
+        \item The Sargan overidentification test statistic $J(\hat{\theta}, W)$ is calculated as: $\left( \frac{1}{\sqrt{N}} \sum_{i=1}^{N} m_i (\hat{\theta}) \right)' W \left( \frac{1}{\sqrt{N}} \sum_{i=1}^{N} m_i (\hat{\theta}) \right)$, where $N$ represents the number of observations or individuals in the sample.
+
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Robustness (3/4)}
+    \begin{itemize}
+        \item In the presence of \textbf{heteroskedasticity}, panel-robust standard errors can be computed using system GMM estimation. 
+
+        \item In this case, the one-step GMM estimator remains consistent under heteroskedasticity but is no longer efficient.
+
+        \item The two-step standard errors are biased in finite samples, so the Windmeijer finite-sample correction should be applied.
+
+        \item The corrected standard errors are still biased but less severely.
+
+        \item However, when using panel-robust standard errors, the Sargan overidentification test cannot be computed because the asymptotic distribution is unknown.
+        
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Robustness (4/4)}
+    \begin{itemize}
+        \item It should be noted that \textbf{multicollinearity} is not a problem when using instrumental analysis, which isolates the effect of explanatory variables from group effects and other variable effects. 
+
+        \item In instrumental analysis, the focus is on the strength of the instruments rather than the correlation among independent variables.
+
+        \item Multicollinearity among exogenous independent variables (i.e., variables not affected by endogeneity) generally does not affect the validity of the instruments or the identification strategy used in instrumental analysis.
+
+        \item However, perfect multicollinearity among the instruments themselves can weaken their ability to address endogeneity, and system GMM will \textbf{drop variables with perfect multicollinearity}.
+        
+    \end{itemize}
+\end{frame}
+
+\end{document} 
